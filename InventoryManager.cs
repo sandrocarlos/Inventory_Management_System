@@ -171,7 +171,6 @@ public class InventoryManager
                 }
             }
         }
-
         return searchCategory;
     }     
 }
