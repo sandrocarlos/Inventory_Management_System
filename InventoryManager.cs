@@ -94,7 +94,7 @@ public class InventoryManager
     public static List<InventoryItem> GetAllInventory(SQLiteConnection conn)
     {
         List<InventoryItem> items = new List<InventoryItem>();
-        string sql = "SELECT * FROM Inventory";
+        string sql = "SELECT ItemID, ItemName, ItemCategory, ItemDescription, ItemQuantity, LastUpdated, UpdatedBy FROM Inventory ORDER BY ItemCategory";
         SQLiteCommand cmd = conn.CreateCommand();
         cmd.CommandText = sql;
 
@@ -104,12 +104,12 @@ public class InventoryManager
         {
             items.Add(new InventoryItem(
                 rdr.GetInt32(0),
-                rdr.GetString(1),
-                rdr.GetString(2),
-                rdr.GetInt32(4),
-                rdr.GetString(3),
-                rdr.GetString(6),            
-                rdr.GetDateTime(5)
+                rdr.IsDBNull(1) ? "" : rdr.GetString(1),
+                rdr.IsDBNull(2) ? "" : rdr.GetString(2),
+                rdr.IsDBNull(4) ? 0 : rdr.GetInt32(4),
+                rdr.IsDBNull(3) ? "" : rdr.GetString(3),
+                rdr.IsDBNull(6) ? "System" : rdr.GetString(6),            
+                rdr.IsDBNull(5) ? DateTime.MinValue : rdr.GetDateTime(5)
             ));
         }
 
@@ -118,7 +118,7 @@ public class InventoryManager
 
     public static InventoryItem SearchItemID(SQLiteConnection conn, int itemID)
     {
-        string sql = "SELECT * FROM Inventory WHERE ItemID = @id";
+        string sql = "SELECT ItemID, ItemName, ItemCategory, ItemDescription, ItemQuantity, LastUpdated, UpdatedBy FROM Inventory WHERE ItemID = @id";
 
         using (SQLiteCommand cmd = conn.CreateCommand())
         {
@@ -131,12 +131,12 @@ public class InventoryManager
                 {
                     return new InventoryItem(
                         rdr.GetInt32(0),
-                        rdr.GetString(1),
-                        rdr.GetString(2),
-                        rdr.GetInt32(4),
-                        rdr.GetString(3),
-                        rdr.GetString(6),            
-                        rdr.GetDateTime(5)
+                        rdr.IsDBNull(1) ? "" : rdr.GetString(1),
+                        rdr.IsDBNull(2) ? "" : rdr.GetString(2),
+                        rdr.IsDBNull(4) ? 0 : rdr.GetInt32(4),
+                        rdr.IsDBNull(3) ? "" : rdr.GetString(3),
+                        rdr.IsDBNull(6) ? "System" : rdr.GetString(6),            
+                        rdr.IsDBNull(5) ? DateTime.MinValue : rdr.GetDateTime(5)
                     );
                 }
                 
@@ -148,12 +148,12 @@ public class InventoryManager
     public static List<InventoryItem> SearchCategory(SQLiteConnection conn, string category)
     {
         List<InventoryItem> searchCategory = new List<InventoryItem>();
-        string sql = "SELECT * FROM Inventory WHERE ItemCategory = @category";
+        string sql = "SELECT ItemID, ItemName, ItemCategory, ItemDescription, ItemQuantity, LastUpdated, UpdatedBy FROM Inventory WHERE UPPER(ItemCategory) LIKE @category";
 
         using (SQLiteCommand cmd = conn.CreateCommand())
         {
             cmd.CommandText = sql;
-            cmd.Parameters.AddWithValue("@category", category);
+            cmd.Parameters.AddWithValue("@category", "%" + category.ToUpper() + "%");
 
             using (SQLiteDataReader rdr = cmd.ExecuteReader())
             {
@@ -161,12 +161,12 @@ public class InventoryManager
                 {
                     searchCategory.Add(new InventoryItem(
                         rdr.GetInt32(0),
-                        rdr.GetString(1),
-                        rdr.GetString(2),
-                        rdr.GetInt32(4),
-                        rdr.GetString(3),
-                        rdr.GetString(6),            
-                        rdr.GetDateTime(5)
+                        rdr.IsDBNull(1) ? "" : rdr.GetString(1),
+                        rdr.IsDBNull(2) ? "" : rdr.GetString(2),
+                        rdr.IsDBNull(4) ? 0 : rdr.GetInt32(4),
+                        rdr.IsDBNull(3) ? "" : rdr.GetString(3),
+                        rdr.IsDBNull(6) ? "System" : rdr.GetString(6),            
+                        rdr.IsDBNull(5) ? DateTime.MinValue : rdr.GetDateTime(5)
                     ));
                 }
             }

@@ -44,47 +44,6 @@ public class InventoryItem : IInventory
         ItemDescription = description;
     }
 
-    public void UpdateQuantity(int qty) //method to adjust quantities in inventory
-    {
-        if (qty < 0)
-        {
-            throw new ArgumentException("Quantity cannot be a negative number.");
-        }
-                    
-        ItemQuantity = qty;
-    }
-
-    public void IncreaseStock(int amount)
-    {
-        if (amount < 0)
-        {
-            throw new ArgumentException("Increase amount cannot be negative.");
-        }
-
-        ItemQuantity += amount;
-    }
-
-    public void DecreaseStock(int amount)
-    {
-        if (amount < 0)
-        {
-            throw new ArgumentException("Decrease amount cannot be negative.");
-        }
-
-        if (ItemQuantity - amount < 0)
-        {
-            throw new InvalidOperationException("Stock cannot go below zero.");
-        }
-
-        ItemQuantity -= amount;
-    }
-    public void UpdateDetails(string name, string category, string description) //method to update a name, description, or category for an item
-    {
-        ItemName = name;
-        ItemCategory = category;
-        ItemDescription = description;
-    }
-
     public override string ToString() //used to output data pertaining to item info
     {
         return 
